@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Auth\Seller;
 
-use App\User;
+use App\Seller;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Auth;
 
 class RegisterController extends Controller
 {
@@ -28,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/seller';
 
     /**
      * Create a new controller instance.
@@ -37,9 +38,12 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('guest:seller');
     }
-
+    public function showregisterForm()
+    {
+        return view('auth.seller.register');
+    }
     /**
      * Get a validator for an incoming registration request.
      *
@@ -50,6 +54,8 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
+            'mobile' => ['required'],
+            'gender' => ['required'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -63,10 +69,21 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        return Seller::create([
             'name' => $data['name'],
+            'mobile' => $data['mobile'],
+            'gender' => $data['gender'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+    }
+    /**
+     * Get the guard to be used during registration.
+     *
+     * @return \Illuminate\Contracts\Auth\StatefulGuard
+     */
+    protected function guard()
+    {
+        return Auth::guard('seller');
     }
 }

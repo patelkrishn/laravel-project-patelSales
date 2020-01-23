@@ -1,27 +1,5 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-
-Route::get('/seller','SellerController@index');
-
 Route::GET('/seller/register','Auth\Seller\RegisterController@showregisterForm');
 Route::POST('/seller/register','Auth\Seller\RegisterController@register')->name('seller.register');
 Route::GET('/seller/login','Auth\Seller\LoginController@showLoginForm')->name('auth.seller.login');
@@ -31,3 +9,17 @@ Route::POST('/seller/password/email','Auth\Seller\ForgotPasswordController@sendR
 Route::GET('/seller/password/reset','Auth\Seller\ForgotPasswordController@showLinkRequestForm')->name('seller.password.request');
 Route::POST('/seller/password/reset','Auth\Seller\ResetPasswordController@reset');
 Route::GET('/seller/password/reset/{token}','Auth\Seller\ResetPasswordController@showResetForm')->name('seller.password.reset');
+
+Auth::routes();
+
+
+Route::get('/', function () {
+    return redirect('/home');
+});
+
+
+Route::get('/home', 'HomeController@index')->name('home');
+Route::resource('/product', 'ProductController');
+
+
+Route::get('/seller','SellerController@index');

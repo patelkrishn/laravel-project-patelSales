@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    Welcome to Seller dashboard!!
+                    Welcome to Seller dashboard!!  {{Auth::user()}}
                 </div>
             </div>
         </div>

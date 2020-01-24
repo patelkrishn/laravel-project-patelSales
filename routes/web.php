@@ -1,5 +1,7 @@
 <?php
 
+//don't touch this routes
+
 Route::GET('/seller/register','Auth\Seller\RegisterController@showregisterForm');
 Route::POST('/seller/register','Auth\Seller\RegisterController@register')->name('seller.register');
 Route::GET('/seller/login','Auth\Seller\LoginController@showLoginForm')->name('auth.seller.login');
@@ -11,6 +13,12 @@ Route::POST('/seller/password/reset','Auth\Seller\ResetPasswordController@reset'
 Route::GET('/seller/password/reset/{token}','Auth\Seller\ResetPasswordController@showResetForm')->name('seller.password.reset');
 
 Auth::routes();
+
+//don't touch this routes
+
+
+
+
 
 
 Route::get('/', function () {

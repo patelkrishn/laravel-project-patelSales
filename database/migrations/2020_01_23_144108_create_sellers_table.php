@@ -20,8 +20,8 @@ class CreateSellersTable extends Migration
             $table->bigInteger('mobile');
             $table->string('email');
             $table->string('password');
-            $table->integer('sellerAddress');
-            $table->integer('legelDetails');
+            $table->integer('sellerAddress')->nullable();
+            $table->integer('legelDetails')->nullable();
             $table->timestamps();
         });
     }

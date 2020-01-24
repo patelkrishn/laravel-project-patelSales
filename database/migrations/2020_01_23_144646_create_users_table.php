@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->bigInteger('mobile');
             $table->string('email');
             $table->string('password');
-            $table->integer('userAddress');
+            $table->integer('userAddress')->nullable();
             $table->timestamps();
         });
     }

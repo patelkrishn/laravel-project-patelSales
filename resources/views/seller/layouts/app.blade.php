@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-  <title>AdminLTE 3 | Dashboard 3</title>
+  <title>Patel Sales | Dashboard </title>
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+  <!-- summernote -->
+  <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.css') }}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -65,7 +67,7 @@ to get the desired effect
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <img src="{{ asset('dist/img/user1-128x128.jpg') }}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Brad Diesel
@@ -81,7 +83,7 @@ to get the desired effect
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <img src="{{ asset('dist/img/user8-128x128.jpg') }}" alt="User Avatar" class="img-size-50 img-circle mr-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   John Pierce
@@ -97,7 +99,7 @@ to get the desired effect
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <img src="{{ asset('dist/img/user3-128x128.jpg') }}" alt="User Avatar" class="img-size-50 img-circle mr-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Nora Silvester
@@ -157,8 +159,8 @@ to get the desired effect
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
-      <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+    <a href="/seller" class="brand-link">
+      <img src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
            style="opacity: .8">
       <span class="brand-text font-weight-light">Patel Sales</span>
     </a>
@@ -168,7 +170,7 @@ to get the desired effect
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">{{ Auth::user()->name }}</a>
@@ -180,7 +182,65 @@ to get the desired effect
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-            
+          
+               <li class="nav-item">
+                <a href="/seller" class="nav-link {{ Request::path()=='seller' ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                  <p>
+                    Dashboard
+                  </p>
+                </a>
+              </li>
+              @if (Request::path()=='seller/products' || Request::path()=='seller/product/add')
+                  <li class="nav-item has-treeview  menu-open">
+              @else
+                  <li class="nav-item has-treeview">
+              @endif
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>
+                    Products
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="/seller/products" class="nav-link {{ Request::path()=='seller/products' ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>All Products</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="/seller/product/add" class="nav-link {{ Request::path()=='seller/product/add' ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Add New</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>
+                    Orders
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="/seller/products" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>All Orders</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="/seller/product/add" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Pending Orders</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -211,10 +271,13 @@ to get the desired effect
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE -->
 <script src="{{ asset('dist/js/adminlte.js') }}"></script>
+<!-- Summernote -->
+<script src="{{ asset('plugins/summernote/summernote-bs4.min.js') }}"></script>
 
 <!-- OPTIONAL SCRIPTS -->
 <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
 <script src="{{ asset('dist/js/demo.js') }}"></script>
 <script src="{{ asset('dist/js/pages/dashboard3.js') }}"></script>
+@yield('extra-js')
 </body>
 </html>

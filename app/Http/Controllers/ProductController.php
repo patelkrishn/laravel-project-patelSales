@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use DB;
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:seller');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,9 +18,13 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        return view('seller.all_product');
     }
 
+    public function addNew()
+    {
+        return view('seller.add_product');
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -35,7 +43,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        echo print_r($request->all());
     }
 
     /**

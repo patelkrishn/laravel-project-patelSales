@@ -27,7 +27,8 @@ Route::get('/', function () {
 
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::resource('/product', 'ProductController');
 
 
 Route::get('/seller','SellerController@index');
+Route::resource('/seller/products','ProductController');
+Route::get('/seller/product/add', 'ProductController@addNew');

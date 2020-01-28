@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Attribute;
+use App\Category;
 use Illuminate\Http\Request;
 use DB;
+use Auth;
 class ProductController extends Controller
 {
     public function __construct()
@@ -18,12 +21,19 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('seller.all_product');
+        $products=Product::join('categories', 'categories.id', '=', 'products.productCategories')
+                            ->select('products.*', 'categories.name')
+                            ->get()
+        ;
+        // print_r($products);
+        // die();
+        return view('seller.all_product',['products'=>$products]);
     }
 
     public function addNew()
     {
-        return view('seller.add_product');
+        $categories=Category::get();
+        return view('seller.add_product',['categories'=>$categories]);
     }
     /**
      * Show the form for creating a new resource.
@@ -43,7 +53,15 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        echo print_r($request->all());
+         Product::insert([
+            'productTitle'=>$request->title,
+            'productShortDescreption'=>$request->short_descreption,
+            'productDescreption'=>$request->descreption,
+            'productVariations'=>NULL,
+            'productCategories'=>$request->category,
+            'sellerId'=>Auth::user()->id
+        ]);
+        return redirect()->back()->with('message', 'Product Added Successfully');
     }
 
     /**

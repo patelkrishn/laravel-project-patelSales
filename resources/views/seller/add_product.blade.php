@@ -25,6 +25,18 @@
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
+    @if(session()->has('message'))
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Success!</h5>
+                {{ session()->get('message') }}
+              </div>
+        </div>
+    </div>
+    @endif
 <!-- Main content -->
 <div class="row">
     <div class="col-md-1"></div>
@@ -71,100 +83,37 @@
                     </section>
                     <!-- /.content -->
                 {{-- /descreption --}}
-                {{-- variations --}}
-                <section class="content">
-                    <div class="row">
-                    <div class="col-md-12">
-                        <div class="card card-info">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                            Variations
-                            </h3>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body pad">
-                            <div class="mb-3">
-                                
-                        <div class="form-group">
-                            <label>Regular Price</label>
-                            <input type="text" name="price" class="form-control" placeholder="Enter product price">
-                        </div>
-                        <div class="form-group">
-                            <label>Sale Price (optional)</label>
-                            <input type="text" name="sale_price" class="form-control" placeholder="Enter product price">
-                        </div>
-                        {{-- discount --}}
-                            <section class="content">
-                                <div class="row">
-                                <div class="col-md-12">
-                                    <div class="card card-primary">
+                {{-- categories --}}
+                    <section class="content">
+                        <div class="row">
+                        <div class="col-md-12">
+                                <div class="card card-info">
                                     <div class="card-header">
                                         <h3 class="card-title">
-                                        Discount (optional)
+                                        Choose categories
                                         </h3>
+                                        
                                     </div>
                                     <!-- /.card-header -->
                                     <div class="card-body pad">
-                                        <div class="mb-3">
-                                            <label>Coupen Code  (optional)</label>
-                                            <input type="text" name="coupen_code" class="form-control" placeholder="Enter coupen code">
-                                            <label>Discount Amount (optional)</label>
-                                            <input type="text" name="discount_amount" class="form-control" placeholder="Enter discount amount">
-                                        </div>
-                                    </div>
-                                    </div>
-                                </div>
-                                <!-- /.col-->
-                                </div>
-                                <!-- ./row -->
-                            </section>
-                            <!-- /.content -->
-                        {{-- /discount --}}
-                        {{-- Inventory --}}
-                            <section class="content">
-                                <div class="row">
-                                <div class="col-md-12">
-                                    <div class="card card-primary">
-                                    <div class="card-header">
-                                        <h3 class="card-title">
-                                        Inventory
-                                        </h3>
-                                    </div>
-                                    <!-- /.card-header -->
-                                    <div class="card-body pad">
-                                        <div class="mb-3">
-                                            <label>SKU</label>
-                                            <input type="text" name="sku" class="form-control" placeholder="Enter product sku">
-                                            <label>Stock quantity</label>
-                                            <input type="text" name="quantity" class="form-control" placeholder="Enter stock quantity">
-                                        </div>
-                                    </div>
+                                        <div class="form-group">
+                                            <select class="form-control" name="category">
+                                                <option>Select...</option>
+                                                @foreach ($categories as $category)
+                                                    <option value="{{$category->id}}">{{$category->name}}</option>
+                                                @endforeach
+                                            </select>
+                                          </div>
                                     </div>
                                 </div>
-                                <!-- /.col-->
-                                </div>
-                                <!-- ./row -->
-                            </section>
-                            <!-- /.content -->
-                        {{-- /Inventory --}}
-                        <div class="form-group">
-                            <label>Attech product image</label>
-                            <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" class="form-control-file" name="image">
-                            </div>
-                            </div>
+                            
                         </div>
-                            </div>
+                        <!-- /.col-->
                         </div>
-                        </div>
-                    </div>
-                    <!-- /.col-->
-                    </div>
-                    <!-- ./row -->
-                </section>
-                <!-- /.content -->
-                {{-- /variations --}}
+                        <!-- ./row -->
+                    </section>
+                    <!-- /.content -->
+                {{-- /categories --}}
             </div>
         <div class="card-footer">
             <button type="submit" class="btn btn-primary">Submit</button>

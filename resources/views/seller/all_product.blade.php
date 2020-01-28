@@ -25,5 +25,59 @@
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Your Product Details</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="product" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>SKU</th>
+                  <th>Stock</th>
+                  <th>Price</th>
+                  <th>Categories</th>
+                </tr>
+                </thead>
+                <tbody>
+                    @foreach ($products as $product)
+                        <tr>
+                            <td>{{ $product->productTitle}}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>{{$product->name}}</td>
+                        </tr>
+                    @endforeach
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>Name</th>
+                <th>SKU</th>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Categories</th>
+            </tr>
+            </tfoot>
+          </table>
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
+    </div>
 
 @endsection 
+
+
+@section('extra-js')
+<script>
+    $(function () {
+      $("#product").DataTable();
+    });
+  </script>
+@endsection
+
+

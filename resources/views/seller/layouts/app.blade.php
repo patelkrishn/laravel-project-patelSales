@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
   <!-- IonIcons -->
   <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
   <!-- summernote -->
@@ -29,7 +31,7 @@ to get the desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-navbar-fixed layout-fixed">
 <div class="wrapper">
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -142,15 +144,46 @@ to get the desired effect
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{ route('logout') }}"
-        onclick="event.preventDefault();
-                      document.getElementById('logout-form').submit();">
-            <i class="fas fa-power-off" style="color:red"></i>
+      <li class="nav-item dropdown user-menu">
+        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+          <img src="../../dist/img/user2-160x160.jpg" class="user-image img-circle elevation-2" alt="User Image">
+          <span class="d-none d-md-inline">{{ Auth::user()->name }}</span>
         </a>
+        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <!-- User image -->
+          <li class="user-header bg-primary">
+            <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+
+            <p>
+                {{ Auth::user()->name }}
+            </p>
+          </li>
+          {{-- <!-- Menu Body -->
+          <li class="user-body">
+            <div class="row">
+              <div class="col-4 text-center">
+                <a href="#">Followers</a>
+              </div>
+              <div class="col-4 text-center">
+                <a href="#">Sales</a>
+              </div>
+              <div class="col-4 text-center">
+                <a href="#">Friends</a>
+              </div>
+            </div>
+            <!-- /.row -->
+          </li> --}}
+          <!-- Menu Footer-->
+          <li class="user-footer">
+            <a href="" class="btn btn-default btn-flat">Profile</a>
+            <a href="{{ route('logout') }}" class="btn btn-default btn-flat float-right"
+        onclick="event.preventDefault();
+                      document.getElementById('logout-form').submit();">Sign out</a>
         <form id="logout-form" action="{{ route('seller.logout') }}" method="POST" style="display: none;">
             @csrf
         </form>
+          </li>
+        </ul>
       </li>
     </ul>
   </nav>
@@ -168,14 +201,14 @@ to get the desired effect
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      {{-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
           <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">{{ Auth::user()->name }}</a>
         </div>
-      </div>
+      </div> --}}
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -191,7 +224,7 @@ to get the desired effect
                   </p>
                 </a>
               </li>
-              @if (Request::path()=='seller/products' || Request::path()=='seller/product/add')
+              @if (Request::path()=='seller/products' || Request::path()=='seller/product/add' || Request::path()=='seller/product/attribute' || Request::path()=='seller/product/variations')
                   <li class="nav-item has-treeview  menu-open">
               @else
                   <li class="nav-item has-treeview">
@@ -214,6 +247,18 @@ to get the desired effect
                     <a href="/seller/product/add" class="nav-link {{ Request::path()=='seller/product/add' ? 'active' : '' }}">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Add New</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="/seller/product/attribute" class="nav-link {{ Request::path()=='seller/product/attribute' ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Attribute</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="/seller/product/variations" class="nav-link {{ Request::path()=='seller/product/variations' ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Product Variations</p>
                     </a>
                   </li>
                 </ul>
@@ -247,7 +292,7 @@ to get the desired effect
     </div>
     <!-- /.sidebar -->
   </aside>
-@yield('content')
+    @yield('content')
     <!-- Main content -->
     
   </div>
@@ -278,6 +323,9 @@ to get the desired effect
 <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
 <script src="{{ asset('dist/js/demo.js') }}"></script>
 <script src="{{ asset('dist/js/pages/dashboard3.js') }}"></script>
+<!-- DataTables -->
+<script src="{{ asset('plugins/datatables/jquery.dataTables.js') }}"></script>
+<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js') }}"></script>
 @yield('extra-js')
 </body>
 </html>

@@ -32,3 +32,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/seller','SellerController@index');
 Route::resource('/seller/products','ProductController');
 Route::get('/seller/product/add', 'ProductController@addNew');
+Route::resource('/seller/product/attribute','AttributeController');
+Route::resource('/seller/product/variations','ProductVariationController');

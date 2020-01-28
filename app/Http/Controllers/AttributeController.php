@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\ProductVariation;
 use Illuminate\Http\Request;
-
-class ProductVariationController extends Controller
+use DB;
+class AttributeController extends Controller
 {
     public function __construct()
     {
@@ -18,7 +17,7 @@ class ProductVariationController extends Controller
      */
     public function index()
     {
-        return view('seller.variations');
+        return view('seller.attribute');
     }
 
     /**
@@ -45,10 +44,10 @@ class ProductVariationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\ProductVariation  $productVariation
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(ProductVariation $productVariation)
+    public function show($id)
     {
         //
     }
@@ -56,10 +55,10 @@ class ProductVariationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\ProductVariation  $productVariation
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(ProductVariation $productVariation)
+    public function edit($id)
     {
         //
     }
@@ -68,10 +67,10 @@ class ProductVariationController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ProductVariation  $productVariation
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProductVariation $productVariation)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -79,10 +78,10 @@ class ProductVariationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\ProductVariation  $productVariation
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductVariation $productVariation)
+    public function destroy($id)
     {
         //
     }

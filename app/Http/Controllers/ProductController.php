@@ -22,14 +22,15 @@ class ProductController extends Controller
     public function index()
     {
         $products=Product::join('categories', 'categories.id', '=', 'products.productCategories')
-                            ->select('products.*', 'categories.name')
-                            ->get()
-        ;
+                            ->join('productvariations','productvariations.productId','=','products.id')
+                            ->select('products.*', 'categories.name','productvariations.*')
+                            ->where('products.sellerId',Auth::user()->id)
+                            ->get();
         // print_r($products);
         // die();
         return view('seller.all_product',['products'=>$products]);
     }
-
+    
     public function addNew()
     {
         $categories=Category::get();
@@ -61,7 +62,7 @@ class ProductController extends Controller
             'productCategories'=>$request->category,
             'sellerId'=>Auth::user()->id
         ]);
-        return redirect()->back()->with('message', 'Product Added Successfully');
+        return redirect()->back()->with('success', 'Product Added Successfully');
     }
 
     /**
@@ -72,11 +73,11 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        // $users = DB::table('ref-link')
-        //     ->rightJoin('product', 'ref-link.ref_pro_id', '=', 'product.id')
-        //     ->where('ref_pro_id',$product->id)
-        //     ->get();
-        //     return dump($users);
+        $products=Product::join('categories', 'categories.id', '=', 'products.productCategories')
+                            ->join('productvariations','productvariations.productId','=','products.id')
+                            ->select('products.*', 'categories.name','productvariations.*')
+                            ->where('products.sellerId',Auth::user()->id)
+                            ->get();
        return view('user.productDetails',['items'=>$product]);
     }
 

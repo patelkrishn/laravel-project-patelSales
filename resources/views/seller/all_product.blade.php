@@ -35,6 +35,7 @@
               <table id="product" class="table table-bordered table-striped">
                 <thead>
                 <tr>
+                  <th><i class="far fa-image"></i></th>
                   <th>Name</th>
                   <th>SKU</th>
                   <th>Stock</th>
@@ -45,16 +46,18 @@
                 <tbody>
                     @foreach ($products as $product)
                         <tr>
-                            <td>{{ $product->productTitle}}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td width="9%"><img src="{{asset($product->productImage) }}" alt="..." class="img-thumbnail" width="100%"></td>
+                            <td><a href="#" class="nav nav-link variation_details" id="{{ $product->id}}">{{ $product->productTitle}}</a></td>
+                            <td>{{ $product->sku}}</td>
+                            <td style="{{ $product->stockQuantity==0 ? 'color:red' : 'color:green' }}">{{ $product->stockQuantity}}&nbsp;({{ $product->stockQuantity==0 ? 'out of stock' : 'in stock' }})</td>
+                            <td>{{ $product->productPrice}}</td>
                             <td>{{$product->name}}</td>
                         </tr>
                     @endforeach
             </tbody>
             <tfoot>
             <tr>
+                <th><i class="far fa-image"></i></th>
                 <th>Name</th>
                 <th>SKU</th>
                 <th>Stock</th>
@@ -68,7 +71,28 @@
       </div>
       <!-- /.card -->
     </div>
-
+    <div class="modal fade" id="modal-xl">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Product Details</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div id="test"></div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
 @endsection 
 
 
@@ -77,6 +101,19 @@
     $(function () {
       $("#product").DataTable();
     });
+    $(document).on('click', '.variation_details', function(){  
+           var id = $(this).attr("id");
+                $.ajax({  
+                     url:"/seller/product/variations/"+id,  
+                     method:"GET",  
+                     data:{id:id},  
+                     success:function(data){  
+                          $('#test').html(data);  
+                          $('#modal-xl').modal('show');  
+                     }  
+                });  
+                      
+      });
   </script>
 @endsection
 

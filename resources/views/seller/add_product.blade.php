@@ -25,14 +25,14 @@
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-    @if(session()->has('message'))
+    @if(session()->has('success'))
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-10">
             <div class="alert alert-success alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 <h5><i class="icon fas fa-check"></i> Success!</h5>
-                {{ session()->get('message') }}
+                {{ session()->get('success') }}
               </div>
         </div>
     </div>

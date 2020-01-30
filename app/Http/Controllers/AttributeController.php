@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use App\Attribute;
+use App\Product;
+use Auth;
 class AttributeController extends Controller
 {
     public function __construct()
@@ -17,17 +20,28 @@ class AttributeController extends Controller
      */
     public function index()
     {
-        return view('seller.attribute');
+        $products=Product::where('sellerId',Auth::user()->id)->get();
+        $attributes=Product::join('attributes','attributes.productId','=','products.id')
+                            ->select('products.*','attributes.*')
+                            ->where('products.sellerId',Auth::user()->id)
+                            ->get();
+        // print_r($attributes);
+        // die();
+        return view('seller.attribute',['products'=>$products,'attributes'=>$attributes]);
     }
-
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        Attribute::insert([
+            'productId'=>$request->productId,
+            'name'=>$request->sizeName,
+            'type'=>'size'
+        ]);
+        return redirect()->back()->with('success', 'Attribute Added Successfully');
     }
 
     /**
@@ -38,7 +52,12 @@ class AttributeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Attribute::insert([
+            'productId'=>$request->productId,
+            'name'=>$request->colorName,
+            'type'=>'color'
+        ]);
+        return redirect()->back()->with('success', 'Attribute Added Successfully');
     }
 
     /**

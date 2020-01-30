@@ -23,7 +23,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $data=Product::all();
+        $data=Product::join('productvariations','productvariations.productId','=','products.id')
+                        ->join('categories','categories.id','=','products.productCategories')
+                        ->select('products.*','productvariations.*','categories.name')
+                        ->get();
         return view('user.home',['data'=>$data]);
     }
 }

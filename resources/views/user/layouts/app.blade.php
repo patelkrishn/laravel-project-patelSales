@@ -5,8 +5,8 @@
   <!-- Required meta tags -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <link rel="icon" href="img/favicon.png" type="image/png" />
-  <title>Eiser ecommerce</title>
+  <link rel="icon" href="{{asset('/user/img/fevicon.png')}}" type="image/png" />
+  <title>Patel Sales</title>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="{{ asset('user/css/bootstrap.css') }}" />
   <link rel="stylesheet" href="{{ asset('user/vendors/linericon/style.css') }}" />
@@ -21,6 +21,8 @@
   <!-- main css -->
   <link rel="stylesheet" href="{{ asset('user/css/style.css') }}" />
   <link rel="stylesheet" href="{{ asset('user/css/responsive.css') }}" />
+   <!-- Toastr -->
+   <link rel="stylesheet" href="{{ asset('user/toastr/toastr.min.css') }}">
 </head>
 
 <body>
@@ -78,37 +80,13 @@
               <div class="col-lg-7 pr-0">
                 <ul class="nav navbar-nav center_nav pull-right">
                   <li class="nav-item active">
-                    <a class="nav-link" href="index.html">Home</a>
+                    <a class="nav-link" href="/home">Home</a>
                   </li>
-                  <li class="nav-item submenu dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                      aria-expanded="false">Shop</a>
-                    <ul class="dropdown-menu">
-                      <li class="nav-item">
-                        <a class="nav-link" href="category.html">Shop Category</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="single-product.html">Product Details</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="checkout.html">Product Checkout</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="cart.html">Shopping Cart</a>
-                      </li>
-                    </ul>
+                  <li class="nav-item">
+                        <a class="nav-link" href="/cart">Shop</a>
                   </li>
-                  <li class="nav-item submenu dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                      aria-expanded="false">Blog</a>
-                    <ul class="dropdown-menu">
-                      <li class="nav-item">
-                        <a class="nav-link" href="blog.html">Blog</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="single-blog.html">Blog Details</a>
-                      </li>
-                    </ul>
+                  <li class="nav-item">
+                        <a class="nav-link" href="/cart">Shopping Cart</a>
                   </li>
                   <li class="nav-item submenu dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -253,6 +231,10 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
   <script src="{{ asset('user/vendors/counter-up/jquery.counterup.js') }}"></script>
   <script src="{{ asset('user/js/mail-script.js') }}"></script>
   <script src="{{ asset('user/js/theme.js') }}"></script>
+  <!-- Toastr -->
+<script src="{{ asset('user/toastr/toastr.min.js') }}"></script>
 </body>
 
 </html>
+
+@yield('extra-js')

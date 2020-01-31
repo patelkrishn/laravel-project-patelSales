@@ -73,12 +73,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $products=Product::join('categories', 'categories.id', '=', 'products.productCategories')
-                            ->join('productvariations','productvariations.productId','=','products.id')
-                            ->select('products.*', 'categories.name','productvariations.*')
-                            ->where('products.sellerId',Auth::user()->id)
-                            ->get();
-       return view('user.productDetails',['items'=>$product]);
+        
     }
 
     /**

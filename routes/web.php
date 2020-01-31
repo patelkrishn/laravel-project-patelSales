@@ -40,3 +40,11 @@ Route::get('/getAttributeForVariations','ProductVariationController@getAttribute
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('/product', 'User\ProductController');
+
+Route::resource('/cart', 'CartController');
+Route::get('/cart/removeDiscount/{id}','CartController@removeDiscount');
+Route::post('/cart/coupen','CartController@coupen');
+
+Route::resource('/payment', 'PaymentController');
+
+Route::view('/order', 'user.orderPlaced');

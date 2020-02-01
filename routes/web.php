@@ -46,5 +46,6 @@ Route::get('/cart/removeDiscount/{id}','CartController@removeDiscount');
 Route::post('/cart/coupen','CartController@coupen');
 
 Route::resource('/payment', 'PaymentController');
+Route::post('/payment/paytmRsponse','PaymentController@paytmResponse');
 
 Route::view('/order', 'user.orderPlaced');

@@ -9,6 +9,7 @@ use App\Cart;
 use App\Order;
 use Illuminate\Http\Request;
 use Image;
+use PaytmWallet;
 
 class PaymentController extends Controller
 {
@@ -62,7 +63,8 @@ class PaymentController extends Controller
             $this->dumpCartToPayment('COD','');
             return redirect('/order')->with('success','Order placed');
         }elseif($request->selector=='pwp') {
-            return redirect()->back()->with('success','Paytm karo');
+            $order=rand(11111,999999);
+            $this->callPaytmGateway($order,$request->payableAmount);
         }else {
             return redirect()->back()->with('warning','Please select payment method');
         }
@@ -97,6 +99,25 @@ class PaymentController extends Controller
             ]);
             Cart::where(['userId'=>Auth::user()->id,'status'=>1])->update(['status'=>0]);
         }
+    }
+
+    public function callPaytmGateway($order,$amount)
+    {
+        $payment = PaytmWallet::with('receive');
+        $payment->prepare([
+          'order' => $order,
+          'user' => Auth::user()->id,
+          'mobile_number' => Auth::user()->mobile,
+          'email' => Auth::user()->email,
+          'amount' => $amount,
+          'callback_url' => asset('/payment/paytmRsponse')
+        ]);
+        return $payment->receive();
+    }
+    public function paytmResponse(Request $request)
+    {
+        dd($request->all());
+        return redirect()->back()->with('success','Paytm karo');
     }
 
     /**

@@ -112,7 +112,7 @@ class PaymentController extends Controller
           'amount' => $amount,
           'callback_url' => asset('/payment/paytmRsponse')
         ]);
-        return dd($payment->receive());
+        return $payment->receive();
     }
     public function paytmResponse(Request $request)
     {

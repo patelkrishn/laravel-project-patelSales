@@ -22,5 +22,115 @@
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
+    <div class="row ml-2">
+      <div class="col-md-6">
+        
+      </div>
+      <div class="col-md-6">
+        
+      </div>
+    </div>
+      <div class="row ml-2">
+        <div class="col-md-6">
+          <!-- TABLE: LATEST ORDERS -->
+          <div class="card">
+            <div class="card-header border-transparent">
+              <h3 class="card-title">Latest Orders</h3>
 
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table m-0">
+                  <thead>
+                  <tr>
+                    <th width='40%'>Order</th>
+                  <th width='1%'>View</th>
+                  <th width='20%'>Date</th>
+                  <th width='20%'>Status</th>
+                  <th width='19%'>Total</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($orders as $order)
+                    <tr>
+                        <td><a href="">#{{$order->id}} {{$order->name}}</a></td>
+                        <td><button class="btn btn-default order_details" id="{{ $order->id}}"><i class="fa fa-eye"></i></button></td>
+                        <td>{{ $order->created_at}}</td>
+                        <td>
+                            @if ($order->status=='COMPLETED')
+                                <span class="badge badge-primary">{{ $order->status}}</span>
+                            @elseif($order->status=='PENDING')
+                                <span class="badge badge-info">{{ $order->status}}</span>  
+                            @elseif($order->status=='HOLD')
+                                <span class="badge badge-warning">{{ $order->status}}</span>  
+                            @elseif($order->status=='DISPATCH')
+                                <span class="badge badge-success">{{ $order->status}}</span>
+                            @elseif($order->status=='FAILED')
+                            <span class="badge badge-danger">{{ $order->status}}</span>
+                                {{-- <button type="button" class="btn btn-danger disabled">{{ $order->status}}</button> --}}
+                            @endif
+                        </td>
+                        <td>₹{{ $order->totalAmount}}</td>
+                    </tr>
+                @endforeach
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer clearfix">
+              <a href="javascript:void(0)" class="btn btn-sm btn-info float-left">Place New Order</a>
+              <a href="/seller/order" class="btn btn-sm btn-secondary float-right">View All Orders</a>
+            </div>
+            <!-- /.card-footer -->
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+    {{-- </div> --}}
+
+    <div class="modal fade" id="modal-default">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div id="test"></div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
     @endsection
+
+        
+@section('extra-js')
+<script>
+    $(function () {
+      $("#order").DataTable();
+    });
+    $(document).on('click', '.order_details', function(){  
+           var id = $(this).attr("id");
+                $.ajax({  
+                     url:"/seller/order/"+id,  
+                     method:"GET",  
+                     data:{id:id},  
+                     success:function(data){  
+                          $('#test').html(data);  
+                          $('#modal-default').modal('show');  
+                     }  
+                });  
+                      
+      });
+  </script>
+@endsection
+
+

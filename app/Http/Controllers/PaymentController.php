@@ -7,9 +7,11 @@ use App\Payment;
 use App\Address;
 use App\Cart;
 use App\Order;
+use App\ProductVariation;
 use Illuminate\Http\Request;
 use Image;
 use PaytmWallet;
+use App\Http\Controllers\NotificationController;
 
 class PaymentController extends Controller
 {
@@ -64,7 +66,7 @@ class PaymentController extends Controller
             return redirect('/order')->with('success','Order placed');
         }elseif($request->selector=='pwp') {
             $order=rand(11111,999999);
-            $payableAmount=$request->payableAmount+59;
+            $payableAmount=$request->payableAmount;
             $this->callPaytmGateway($order,$payableAmount);
         }else {
             return redirect()->back()->with('warning','Please select payment method');
@@ -78,14 +80,34 @@ class PaymentController extends Controller
                         ->where(['userId'=>Auth::user()->id,'status'=>1])
                         ->get();    
         foreach ($cartData as $item ) {
+            $productVariationsId=$item->productVariationsId;
+            $stockQuantity=$item->stockQuantity-$item->quantity;
+            $totalSales=$item->totalSales+$item->quantity;
+            if ($stockQuantity==0) {
+                $stockStatus=0;
+            }else{
+                $stockStatus=1;
+            }
+            ProductVariation::where('id',$productVariationsId)->update([
+                'stockQuantity'=>$stockQuantity,
+                'totalSales'=>$totalSales,
+                'stockStatus'=>$stockStatus
+            ]);
             $paymentId=Payment::insertGetId([
                 'userId'=>$item->userId,
                 'sellerId'=>$item->sellerId,
                 'cartId'=>$item->id,
-                'amount'=>$item->payableAmount+59,
+                'amount'=>$item->payableAmount,
                 'paymentMode'=>$mode,
                 'referanceNo'=>$referance
             ]);
+            app('App\Http\Controllers\NotificationController')->create(
+                $title="You have a new order",
+                $content="You have a new order of ".$item->productTitle,
+                $status=1,
+                $userId=NULL,
+                $sellerId=$item->sellerId,
+            );
             Order::create([
                 'cartId'=>$item->id,
                 'paymentId'=>$paymentId,

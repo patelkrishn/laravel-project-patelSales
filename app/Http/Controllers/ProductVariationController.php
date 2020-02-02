@@ -10,9 +10,16 @@ use Auth;
 
 class ProductVariationController extends Controller
 {
+    protected $notificationsCount;
     public function __construct()
     {
-        $this->middleware('auth:seller');
+        
+    }
+    public function notifications()
+    {
+        $notifications=app('App\Http\Controllers\NotificationController')->getSellerNotifications(Auth::user()->id);
+        $this->notificationsCount=app('App\Http\Controllers\NotificationController')->getSellerNotificationCount(Auth::user()->id);
+        return $notifications;
     }
     /**
      * Display a listing of the resource.
@@ -22,7 +29,7 @@ class ProductVariationController extends Controller
     public function index()
     {
         $products=Product::where('sellerId',Auth::user()->id)->get();
-        return view('seller.variations',['products'=>$products]);
+        return view('seller.variations',['products'=>$products,'notifications'=>$this->notifications(),'notificationsCount'=>$this->notificationsCount]);
     }
     
     /**
@@ -38,7 +45,7 @@ class ProductVariationController extends Controller
             <div class="form-group">
                 <label>Choose color attribute</label>
                 <select class="form-control" name="color">
-                    <option>Select...</option>';
+                    <option value="">Select...</option>';
                     foreach ($colors as $color)
                     {
                         $output.='<option value="'.$color->name.'">'.$color->name.'</option>';
@@ -52,7 +59,7 @@ class ProductVariationController extends Controller
             <div class="form-group">
                 <label>Choose size attribute</label>
                 <select class="form-control" name="size">
-                    <option>Select...</option>';
+                    <option value="">Select...</option>';
                     foreach ($sizes as $size)
                     {
                         $output.='<option value="'.$size->name.'">'.$size->name.'</option>';
@@ -104,7 +111,7 @@ class ProductVariationController extends Controller
                 }else{
                     $stockStatus=1;
                 }
-                ProductVariation::Insert(
+                $insertId=ProductVariation::insertGetId(
                     [
                         'productId'=>$request->productId,
                         'productImage'=>$path,
@@ -121,6 +128,7 @@ class ProductVariationController extends Controller
                         'totalSales'=>0
                     ]
                 );
+                Product::where('id',$request->productId)->update(['productVariations'=>$insertId]);
                 return redirect()->back()->with('success', 'Product variations set successfully');
             }
         

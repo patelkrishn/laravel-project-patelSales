@@ -9,9 +9,16 @@ use App\Product;
 use Auth;
 class AttributeController extends Controller
 {
+    protected $notificationsCount;
     public function __construct()
     {
-        $this->middleware('auth:seller');
+        
+    }
+    public function notifications()
+    {
+        $notifications=app('App\Http\Controllers\NotificationController')->getSellerNotifications(Auth::user()->id);
+        $this->notificationsCount=app('App\Http\Controllers\NotificationController')->getSellerNotificationCount(Auth::user()->id);
+        return $notifications;
     }
     /**
      * Display a listing of the resource.
@@ -27,7 +34,7 @@ class AttributeController extends Controller
                             ->get();
         // print_r($attributes);
         // die();
-        return view('seller.attribute',['products'=>$products,'attributes'=>$attributes]);
+        return view('seller.attribute',['products'=>$products,'attributes'=>$attributes,'notifications'=>$this->notifications(),'notificationsCount'=>$this->notificationsCount]);
     }
     /**
      * Show the form for creating a new resource.

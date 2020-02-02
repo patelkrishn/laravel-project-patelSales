@@ -12,14 +12,16 @@ use Auth;
 
 class OrderController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+    protected $notificationsCount;
     public function __construct()
     {
-        $this->middleware('auth:seller');
+        
+    }
+    public function notifications()
+    {
+        $notifications=app('App\Http\Controllers\NotificationController')->getSellerNotifications(Auth::user()->id);
+        $this->notificationsCount=app('App\Http\Controllers\NotificationController')->getSellerNotificationCount(Auth::user()->id);
+        return $notifications;
     }
     /**
      * Display a listing of the resource.
@@ -35,7 +37,7 @@ class OrderController extends Controller
                        ->where('payments.sellerId',Auth::user()->id)
                        ->get();
         // dd($orders);
-        return view('seller.order',['orders'=>$orders]);
+        return view('seller.order',['orders'=>$orders,'notifications'=>$this->notifications(),'notificationsCount'=>$this->notificationsCount]);
     }
 
     /**
@@ -87,13 +89,13 @@ class OrderController extends Controller
         <div class="modal-header">
               <h4 class="modal-title"><b>#'.$id.'</b></h4>';
               if($orders['status']=='PENDING'){
-        $output.='<button type="button" class="btn btn-success disabled ml-3">'.$orders['status'].'</button>';
+        $output.='<button type="button" class="btn btn-info disabled ml-3">'.$orders['status'].'</button>';
               }elseif($orders['status']=='COMPLETED'){
         $output.='<button type="button" class="btn btn-primary disabled ml-3">'.$orders['status'].'</button>';
               }elseif($orders['status']=='HOLD'){
         $output.='<button type="button" class="btn btn-warning disabled ml-3">'.$orders['status'].'</button>';
               }elseif($orders['status']=='DISPATCH'){
-                $output.='<button type="button" class="btn btn-info disabled ml-3">'.$orders['status'].'</button>';
+                $output.='<button type="button" class="btn btn-success disabled ml-3">'.$orders['status'].'</button>';
               }else{
         $output.='<button type="button" class="btn btn-danger disabled ml-3">'.$orders['status'].'</button>';
               }
@@ -106,7 +108,7 @@ class OrderController extends Controller
               <h6>'.$address['name'].'</br>
               '.$address['street'].'</br>
               '.$address['landmark'].'</br>
-              '.$address['city'].'</br>
+              '.$address['city'].' '.$address['pincode'].'</br>
               '.$address['state'].'</h6></br>
               <div style="font-weight: 600;font-size: 16px;">Mobile</div> 
               <a href="tel:'.$address['mobile'].'"><u>'.$address['mobile'].'</u></a></br></br>

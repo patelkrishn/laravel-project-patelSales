@@ -10,9 +10,16 @@ use DB;
 use Auth;
 class ProductController extends Controller
 {
+    protected $notificationsCount;
     public function __construct()
     {
-        $this->middleware('auth:seller');
+        
+    }
+    public function notifications()
+    {
+        $notifications=app('App\Http\Controllers\NotificationController')->getSellerNotifications(Auth::user()->id);
+        $this->notificationsCount=app('App\Http\Controllers\NotificationController')->getSellerNotificationCount(Auth::user()->id);
+        return $notifications;
     }
     /**
      * Display a listing of the resource.
@@ -28,13 +35,13 @@ class ProductController extends Controller
                             ->get();
         // print_r($products);
         // die();
-        return view('seller.all_product',['products'=>$products]);
+        return view('seller.all_product',['products'=>$products,'notifications'=>$this->notifications(),'notificationsCount'=>$this->notificationsCount]);
     }
     
     public function addNew()
     {
         $categories=Category::get();
-        return view('seller.add_product',['categories'=>$categories]);
+        return view('seller.add_product',['categories'=>$categories,'notifications'=>$this->notifications(),'notificationsCount'=>$this->notificationsCount]);
     }
     /**
      * Show the form for creating a new resource.

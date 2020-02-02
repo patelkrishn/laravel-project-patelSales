@@ -25,6 +25,8 @@ Route::get('/', function () {
     return redirect('/home');
 });
 
+Route::group(['middleware' => ['auth:seller']], function () {
+    
 Route::get('/seller','SellerController@index');
 
 Route::resource('/seller/products','ProductController');
@@ -36,6 +38,8 @@ Route::resource('/seller/product/variations','ProductVariationController');
 Route::get('/getAttributeForVariations','ProductVariationController@getAttributeForVariations')->name('variations.attribute');
 
 Route::resource('/seller/order', 'OrderController');
+});
+
 
 // this route is use for user
 

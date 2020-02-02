@@ -92,7 +92,7 @@
 			<div class="col-lg-5 offset-lg-1">
 			  <div class="s_product_text">
 				<h3>{{$items['productTitle']}}<br>({{$items['size']}}+{{$items['color']}})</h3>
-				<?php if($items['onsale']==1){echo '<del style="font-weight:400">₹15000</del>';} ?>
+				<?php if($items['onsale']==1){echo '<del style="font-weight:400">₹'.$items['productPrice'].'</del>';} ?>
 				<div class="row">
 					<div class="col-md-3 mr-2"><h2>₹{{ $items['onsale']==1 ? $items['salePrice'] : $items['productPrice']}}</h2></div>
 					<div class="col-md-5"><h4>{{ $items['onsale']==1 ? '₹'.($items['productPrice']-$items['salePrice']).' off' : ''}}</h4></div>
@@ -153,7 +153,7 @@
 				<div class="card_area">
 					<input type="hidden" name="productId" value="{{$items['id']}}">
 					<input type="hidden" name="productPrice" value="{{$items['salePrice']!=0 ? $items['salePrice'] : $items['productPrice']}}">
-				  <button type="submit" class="main_btn" href="#">Add to Cart</button>
+				  <button type="submit" class="genric-btn {{$items['stockQuantity'] == 0 ? 'disable' : 'success'}} radius ">Add to Cart</button>
 				  <a class="icon_btn" href="#">
 					<i class="lnr lnr lnr-diamond"></i>
 				  </a>

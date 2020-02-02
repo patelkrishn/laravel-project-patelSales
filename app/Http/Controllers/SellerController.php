@@ -3,13 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Seller;
+use App\Order;
 use Illuminate\Http\Request;
+use Auth;
 
 class SellerController extends Controller
 {
+    protected $notificationsCount;
     public function __construct()
     {
-        $this->middleware('auth:seller');
+        
+    }
+    public function notifications()
+    {
+        $notifications=app('App\Http\Controllers\NotificationController')->getSellerNotifications(Auth::user()->id);
+        $this->notificationsCount=app('App\Http\Controllers\NotificationController')->getSellerNotificationCount(Auth::user()->id);
+        return $notifications;
     }
     /**
      * Display a listing of the resource.
@@ -18,7 +27,13 @@ class SellerController extends Controller
      */
     public function index()
     {
-        return view('seller.home');
+        $orders=Order::join('carts','carts.id','=','orders.cartId')
+                       ->join('payments','payments.cartId','=','orders.cartId')
+                       ->join('addresses','addresses.userId','=','orders.userId')
+                       ->select('orders.*','addresses.name')
+                       ->where('payments.sellerId',Auth::user()->id)
+                       ->paginate(6);
+        return view('seller.home',['orders'=>$orders,'notifications'=>$this->notifications(),'notificationsCount'=>$this->notificationsCount]);
     }
 
     /**

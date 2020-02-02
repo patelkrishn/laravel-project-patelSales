@@ -31,7 +31,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="order" class="table table-bordered table-striped">
+              <table id="order" class="table table-responsive">
                 <thead>
                 <tr>
                   <th width='40%'>Order</th>
@@ -49,15 +49,16 @@
                             <td>{{ $order->created_at}}</td>
                             <td>
                                 @if ($order->status=='COMPLETED')
-                                    <button type="button" class="btn btn-primary disabled">{{ $order->status}}</button>
+                                    <span class="badge badge-primary">{{ $order->status}}</span>
                                 @elseif($order->status=='PENDING')
-                                    <button type="button" class="btn btn-success disabled">{{ $order->status}}</button>  
+                                    <span class="badge badge-info">{{ $order->status}}</span>  
                                 @elseif($order->status=='HOLD')
-                                    <button type="button" class="btn btn-warning disabled">{{ $order->status}}</button>  
-                                    @elseif($order->status=='DISPATCH')
-                                        <button type="button" class="btn btn-info disabled">{{ $order->status}}</button>
+                                    <span class="badge badge-warning">{{ $order->status}}</span>  
+                                @elseif($order->status=='DISPATCH')
+                                    <span class="badge badge-success">{{ $order->status}}</span>
                                 @elseif($order->status=='FAILED')
-                                    <button type="button" class="btn btn-danger disabled">{{ $order->status}}</button>
+                                    <span class="badge badge-danger">{{ $order->status}}</span>
+                                    {{-- <button type="button" class="btn btn-danger disabled">{{ $order->status}}</button> --}}
                                 @endif
                             </td>
                             <td>₹{{ $order->totalAmount}}</td>

@@ -23,11 +23,61 @@
     </div>
     <!-- /.content-header -->
     <div class="row ml-2">
-      <div class="col-md-6">
-        
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-info">
+          <div class="inner">
+            <h3>{{$pendingOrderCount}}</h3>
+
+            <p>New Orders</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-bag"></i>
+          </div>
+          <a href="/seller/order" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
       </div>
-      <div class="col-md-6">
-        
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-success">
+          <div class="inner">
+            <h3>{{$shipedOrderCount}}</h3>
+
+            <p>Shiped Orders</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-bag"></i>
+          </div>
+          <a href="/seller/order" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-warning">
+          <div class="inner">
+            <h3>{{$holdOrderCount}}</h3>
+
+            <p>On Hold Orders</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-bag"></i>
+          </div>
+          <a href="/seller/order" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-primary">
+          <div class="inner">
+            <h3>{{$completedOrderCount}}</h3>
+
+            <p>Completed Orders</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-bag"></i>
+          </div>
+          <a href="/seller/order" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
       </div>
     </div>
       <div class="row ml-2">
@@ -72,7 +122,7 @@
                                 <span class="badge badge-info">{{ $order->status}}</span>  
                             @elseif($order->status=='HOLD')
                                 <span class="badge badge-warning">{{ $order->status}}</span>  
-                            @elseif($order->status=='DISPATCH')
+                            @elseif($order->status=='SHIPED')
                                 <span class="badge badge-success">{{ $order->status}}</span>
                             @elseif($order->status=='FAILED')
                             <span class="badge badge-danger">{{ $order->status}}</span>

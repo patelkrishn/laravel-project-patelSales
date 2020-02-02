@@ -94,7 +94,7 @@ class OrderController extends Controller
         $output.='<button type="button" class="btn btn-primary disabled ml-3">'.$orders['status'].'</button>';
               }elseif($orders['status']=='HOLD'){
         $output.='<button type="button" class="btn btn-warning disabled ml-3">'.$orders['status'].'</button>';
-              }elseif($orders['status']=='DISPATCH'){
+              }elseif($orders['status']=='SHIPED'){
                 $output.='<button type="button" class="btn btn-success disabled ml-3">'.$orders['status'].'</button>';
               }else{
         $output.='<button type="button" class="btn btn-danger disabled ml-3">'.$orders['status'].'</button>';
@@ -143,15 +143,29 @@ class OrderController extends Controller
         ';
         echo $output;
     }
+    public function orderDetails($order)
+    {
+        $orders=Order::join('addresses','addresses.userId','=','orders.userId')
+                       ->join('productvariations','productvariations.id','=','orders.productVariationsId')
+                       ->join('products','products.id','=','productvariations.productId')
+                       ->join('payments','payments.id','=','orders.paymentId')
+                       ->select('orders.*','addresses.*','products.productTitle','payments.*','productvariations.*')
+                       ->where('orders.id',$order)
+                       ->first();
+                    //    dd($orders);
+        return view('seller.order_details',['orders'=>$orders,'orderId'=>$order,'notifications'=>$this->notifications(),'notificationsCount'=>$this->notificationsCount]);
+    }
     /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function edit(Order $order)
+    public function edit(Order $order,Request $request)
     {
-        //
+        $order->status=$request->orderStatus;
+        $order->save();
+        return redirect()->back()->with('success', 'Order status changed successfully !!');
     }
 
     /**

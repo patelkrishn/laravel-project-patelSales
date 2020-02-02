@@ -38,6 +38,7 @@ Route::resource('/seller/product/variations','ProductVariationController');
 Route::get('/getAttributeForVariations','ProductVariationController@getAttributeForVariations')->name('variations.attribute');
 
 Route::resource('/seller/order', 'OrderController');
+Route::get('/seller/orderDetails/{order}', 'OrderController@orderDetails');
 });
 
 

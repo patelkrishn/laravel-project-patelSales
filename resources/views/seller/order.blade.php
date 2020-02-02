@@ -44,7 +44,7 @@
                 <tbody>
                     @foreach ($orders as $order)
                         <tr>
-                            <td><a href="">#{{$order->id}} {{$order->name}}</a></td>
+                            <td><a href="{{asset('/seller/orderDetails/'.$order->id)}}">#{{$order->id}} {{$order->name}}</a></td>
                             <td><button class="btn btn-default order_details" id="{{ $order->id}}"><i class="fa fa-eye"></i></button></td>
                             <td>{{ $order->created_at}}</td>
                             <td>
@@ -54,7 +54,7 @@
                                     <span class="badge badge-info">{{ $order->status}}</span>  
                                 @elseif($order->status=='HOLD')
                                     <span class="badge badge-warning">{{ $order->status}}</span>  
-                                @elseif($order->status=='DISPATCH')
+                                @elseif($order->status=='SHIPED')
                                     <span class="badge badge-success">{{ $order->status}}</span>
                                 @elseif($order->status=='FAILED')
                                     <span class="badge badge-danger">{{ $order->status}}</span>

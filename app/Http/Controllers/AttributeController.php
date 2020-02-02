@@ -52,9 +52,11 @@ class AttributeController extends Controller
      */
     public function store(Request $request)
     {
-        Attribute::insert([
+        // dd($request->all());
+        Attribute::create([
             'productId'=>$request->productId,
             'name'=>$request->colorName,
+            'colors'=>$request->colors,
             'type'=>'color'
         ]);
         return redirect()->back()->with('success', 'Attribute Added Successfully');

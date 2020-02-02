@@ -35,11 +35,15 @@ Route::resource('/seller/product/attribute','AttributeController');
 Route::resource('/seller/product/variations','ProductVariationController');
 Route::get('/getAttributeForVariations','ProductVariationController@getAttributeForVariations')->name('variations.attribute');
 
+Route::resource('/seller/order', 'OrderController');
+
 // this route is use for user
 
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('/product', 'User\ProductController');
+Route::get('/sizeAjax/{id}', 'User\ProductController@getSizeForAjax');
+Route::get('/sizeAjax', 'User\ProductController@updateSizeForAjax');
 
 Route::resource('/cart', 'CartController');
 Route::get('/cart/removeDiscount/{id}','CartController@removeDiscount');
@@ -49,3 +53,5 @@ Route::resource('/payment', 'PaymentController');
 Route::post('/payment/paytmRsponse','PaymentController@paytmResponse');
 
 Route::view('/order', 'user.orderPlaced');
+
+Route::resource('/address', 'AddressController');

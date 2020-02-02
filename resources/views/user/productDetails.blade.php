@@ -91,8 +91,12 @@
 			</div>
 			<div class="col-lg-5 offset-lg-1">
 			  <div class="s_product_text">
-				<h3>{{$items['productTitle']}}</h3>
-				<h2>₹{{$items['productPrice']}}</h2>
+				<h3>{{$items['productTitle']}}<br>({{$items['size']}}+{{$items['color']}})</h3>
+				<?php if($items['onsale']==1){echo '<del style="font-weight:400">₹15000</del>';} ?>
+				<div class="row">
+					<div class="col-md-3 mr-2"><h2>₹{{ $items['onsale']==1 ? $items['salePrice'] : $items['productPrice']}}</h2></div>
+					<div class="col-md-5"><h4>{{ $items['onsale']==1 ? '₹'.($items['productPrice']-$items['salePrice']).' off' : ''}}</h4></div>
+				</div>
 				<ul class="list">
 				  <li>
 					<a class="active" href="#">
@@ -106,6 +110,18 @@
 				<p>
 				  {{$items['productShortDescreption']}}
 				</p>
+				@if ($colorAttributes!=NULL)
+					<div>
+						<div>Color :</div>
+						@foreach ($colorAttributes as $row)
+							<button class="btn btn-default colors" id="{{$row->name}}"> <i class="fa fa-circle" style="color:{{ $row->colors}}"></i><div class="{{$row->name==$items['color'] ? 'active' : ''}}">{{$row->name}}</div></button>&nbsp;
+						@endforeach
+					</div>
+				@endif
+
+				<div id="sizeAttribute"></div>
+				
+				<br>
 				<div class="product_count">
 					<form action="{{route('cart.store')}}" method="post">
 						@csrf
@@ -348,4 +364,49 @@
     });
 </script>
 @endif
+@if(session()->has('warning'))
+<script>
+	$(document).ready(function(){
+      toastr.warning('{{ session()->get('warning') }}')
+    });
+</script>
+@endif
+@if(session()->has('error'))
+<script>
+	$(document).ready(function(){
+      toastr.error('{{ session()->get('error') }}')
+    });
+</script>
+@endif
+<script>
+    $( document ).ready(function() {  
+           var id = "{{$items['productId']}}";
+		   var color= "{{$items['color']}}";
+		   var size= "{{$items['size']}}";
+                $.ajax({  
+                     url:"/sizeAjax/"+id,  
+                     method:"GET",  
+                     data:{id:id,color:color,size:size},  
+                     success:function(data){  
+                          $('#sizeAttribute').html(data);  
+                     }  
+                });  
+                      
+      });
+	  $(document).on('click', '.colors', function(){  
+           var color = $(this).attr("id");
+		   var id = "{{$items['productId']}}";
+		   var size= "{{$items['size']}}";
+		//    alert(id);
+                $.ajax({  
+                     url:"/sizeAjax/",  
+                     method:"GET",  
+                     data:{color:color,id:id,size:size},  
+                     success:function(data){  
+						$('#sizeAttribute').html(data);  
+                     }  
+                });  
+                      
+      });
+  </script>
 @endsection

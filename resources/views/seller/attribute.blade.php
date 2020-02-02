@@ -101,6 +101,10 @@
                                 <label>Color</label>
                                 <input type="text" class="form-control" name="colorName">
                             </div>
+                            <div class="form-group">
+                                <label>Color <small>(choose color to show color on color variation tab)</small></label>
+                                <input type="color" class="form-control" name="colors">
+                            </div>
                             <input type="submit" class="btn btn-primary">
                         </form>
                     </div>

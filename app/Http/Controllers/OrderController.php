@@ -2,11 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Order;
 use Illuminate\Http\Request;
+use App\Order;
+use App\ProductVariations;
+use App\Product;
+use App\Cart;
+use App\Payment;
+use Auth;
 
 class OrderController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:seller');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +28,14 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        $orders=Order::join('carts','carts.id','=','orders.cartId')
+                       ->join('payments','payments.cartId','=','orders.cartId')
+                       ->join('addresses','addresses.userId','=','orders.userId')
+                       ->select('orders.*','addresses.name')
+                       ->where('payments.sellerId',Auth::user()->id)
+                       ->get();
+        // dd($orders);
+        return view('seller.order',['orders'=>$orders]);
     }
 
     /**
@@ -46,9 +67,80 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        $address=Order::join('addresses','addresses.userId','=','orders.userId')
+                     ->select('orders.*','addresses.*')
+                     ->where('orders.userId',$order->userId)
+                     ->first();
+        $orders=Order::join('productvariations','productvariations.id','=','orders.productVariationsId')
+                      ->join('products','productvariations.productId','=','products.id')
+                      ->join('payments','payments.id','=','orders.paymentId')
+                      ->select('products.productTitle','orders.*','productvariations.*','payments.paymentMode')
+                      ->where('orders.id',$order->id)
+                      ->first();
+                    //   dd($orders);
+        $this->htmlView($address,$orders,$order->id);
     }
 
+    public function htmlView($address,$orders,$id)
+    {
+        $output='
+        <div class="modal-header">
+              <h4 class="modal-title"><b>#'.$id.'</b></h4>';
+              if($orders['status']=='PENDING'){
+        $output.='<button type="button" class="btn btn-success disabled ml-3">'.$orders['status'].'</button>';
+              }elseif($orders['status']=='COMPLETED'){
+        $output.='<button type="button" class="btn btn-primary disabled ml-3">'.$orders['status'].'</button>';
+              }elseif($orders['status']=='HOLD'){
+        $output.='<button type="button" class="btn btn-warning disabled ml-3">'.$orders['status'].'</button>';
+              }elseif($orders['status']=='DISPATCH'){
+                $output.='<button type="button" class="btn btn-info disabled ml-3">'.$orders['status'].'</button>';
+              }else{
+        $output.='<button type="button" class="btn btn-danger disabled ml-3">'.$orders['status'].'</button>';
+              }
+        $output.=' <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            <div style="font-weight: 600;font-size: 16px;">Shiping Details</div>
+              <h6>'.$address['name'].'</br>
+              '.$address['street'].'</br>
+              '.$address['landmark'].'</br>
+              '.$address['city'].'</br>
+              '.$address['state'].'</h6></br>
+              <div style="font-weight: 600;font-size: 16px;">Mobile</div> 
+              <a href="tel:'.$address['mobile'].'"><u>'.$address['mobile'].'</u></a></br></br>
+              <div style="font-weight: 600;font-size: 16px;">Payment via</div>';
+              if($orders['paymentMode']=="PWP") {
+                  $output.="Paid withPaytm</br></br>";
+              }elseif($orders['paymentMode']=='COD'){
+                  $output.="Cash on delivery</br></br>";
+              }
+              $output.='
+              <table class="table">
+                <thead>
+                <tr>
+                    <th width="50%">Product</th>
+                    <th width="35%">Quantity</th>
+                    <th width="15%"><div class="float-right">Total</div></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>'.$orders['productTitle'].'</td>
+                    <td>X'.$orders['quantity'].'</td>
+                    <td>₹'.$orders['totalAmount'].'</td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+            </div>
+        ';
+        echo $output;
+    }
     /**
      * Show the form for editing the specified resource.
      *

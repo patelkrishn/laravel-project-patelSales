@@ -83,7 +83,7 @@
                     <a class="nav-link" href="/home">Home</a>
                   </li>
                   <li class="nav-item">
-                        <a class="nav-link" href="/cart">Shop</a>
+                        <a class="nav-link" href="/product">Shop</a>
                   </li>
                   <li class="nav-item">
                         <a class="nav-link" href="/cart">Shopping Cart</a>

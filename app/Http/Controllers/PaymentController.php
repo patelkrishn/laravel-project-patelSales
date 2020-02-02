@@ -64,7 +64,8 @@ class PaymentController extends Controller
             return redirect('/order')->with('success','Order placed');
         }elseif($request->selector=='pwp') {
             $order=rand(11111,999999);
-            $this->callPaytmGateway($order,$request->payableAmount);
+            $payableAmount=$request->payableAmount+59;
+            $this->callPaytmGateway($order,$payableAmount);
         }else {
             return redirect()->back()->with('warning','Please select payment method');
         }
@@ -81,7 +82,7 @@ class PaymentController extends Controller
                 'userId'=>$item->userId,
                 'sellerId'=>$item->sellerId,
                 'cartId'=>$item->id,
-                'amount'=>$item->payableAmount,
+                'amount'=>$item->payableAmount+59,
                 'paymentMode'=>$mode,
                 'referanceNo'=>$referance
             ]);
@@ -114,10 +115,26 @@ class PaymentController extends Controller
         ]);
         return $payment->receive();
     }
-    public function paytmResponse(Request $request)
+    public function paytmResponse()
     {
-        dd($request->all());
-        return redirect()->back()->with('success','Paytm karo');
+        $transaction = PaytmWallet::with('receive');
+        
+        $response = $transaction->response(); // To get raw response as array
+        //Check out response parameters sent by paytm here -> http://paywithpaytm.com/developer/paytm_api_doc?target=interpreting-response-sent-by-paytm
+        
+        if($transaction->isSuccessful()){
+            $this->dumpCartToPayment('PWP','');
+            return redirect('/order')->with('success','Order placed');
+        }else if($transaction->isFailed()){
+            return redirect()->back()->with('error','Payment Fails'.$transaction->getResponseMessage());
+        }else if($transaction->isOpen()){
+          //Transaction Open/Processing
+        }
+        $transaction->getResponseMessage(); //Get Response Message If Available
+        //get important parameters via public methods
+        $transaction->getOrderId(); // Get order id
+        $transaction->getTransactionId(); // Get transaction id
+      
     }
 
     /**

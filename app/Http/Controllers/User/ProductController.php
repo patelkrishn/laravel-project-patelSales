@@ -4,6 +4,8 @@ namespace App\Http\Controllers\User;
 
 use Illuminate\Http\Request;
 use App\Product;
+use App\Attribute;
+use App\ProductVariation;
 use Auth;
 use App\Http\Controllers\Controller;
 
@@ -16,7 +18,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        return view('user.shop');
     }
 
     /**
@@ -53,7 +55,69 @@ class ProductController extends Controller
                             ->select('products.*', 'categories.name','productvariations.*')
                             ->where('productvariations.id',$id)
                             ->first();
-       return view('user.productDetails',['items'=>$products]);
+        $colorAttributes=Attribute::join('productvariations','productvariations.productId','=','attributes.productId')
+                               ->where(['productvariations.id'=>$id,'attributes.type'=>'color'])
+                               ->get();
+                            //    dd($products);
+       return view('user.productDetails',['items'=>$products,'colorAttributes'=>$colorAttributes]);
+    }
+
+    public function getSizeForAjax(Request $request,$id)
+    {
+        // $sizeAttributes=Attribute::leftJoin('productvariations','productvariations.size','=','attributes.name')
+        //                           ->select('attributes.name','productvariations.id')
+        //                           ->where(['attributes.productId'=>$id,'attributes.type'=>'size'])
+        //                           ->get();
+        $sizeAttributes=ProductVariation::where(['productId'=>$id,'color'=>$request->color])
+                                    ->select('id','size','color')
+                                   ->get();
+            $output='
+                    <div>
+                        <div>Size :</div>
+                        <form method="get">
+            ';		
+            foreach ($sizeAttributes as $item) {
+                $path=asset("/product/".$item->id);
+                if ($item->size==$request->size) {
+                    $output.='<button class="btn btn-default active" formaction="'.$path.'">'.$item->size.'</button>&nbsp;';
+                }else{
+                    $output.='<button class="btn btn-default " formaction="'.$path.'">'.$item->size.'</button>&nbsp;';
+                }
+                
+            }
+            
+            $output.='</form></div>';
+        echo $output;
+        // dd($sizeAttributes);
+    }
+    
+    public function updateSizeForAjax(Request $request)
+    {
+        // $sizeAttributes=Attribute::leftJoin('productvariations','productvariations.size','=','attributes.name')
+        //                           ->select('attributes.name','productvariations.id')
+        //                           ->where(['attributes.productId'=>$id,'attributes.type'=>'size'])
+        //                           ->get();
+        $sizeAttributes=ProductVariation::where(['productId'=>$request->id,'color'=>$request->color])
+                                    ->select('id','size','color')
+                                   ->get();
+            $output='
+                    <div>
+                        <div>Size :</div>
+                        <form method="get">
+            ';		
+            foreach ($sizeAttributes as $item) {
+                $path=asset("/product/".$item->id);
+                if ($item->size==$request->size) {
+                    $output.='<button class="btn btn-default active" formaction="'.$path.'">'.$item->size.'</button>&nbsp;';
+                }else{
+                    $output.='<button class="btn btn-default " formaction="'.$path.'">'.$item->size.'</button>&nbsp;';
+                }
+                
+            }
+            
+            $output.='</form></div>';
+        echo $output;
+        // dd($sizeAttributes);
     }
 
     /**

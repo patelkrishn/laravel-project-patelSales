@@ -35,7 +35,23 @@ class AddressController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Address::updateOrInsert(
+            [
+                'userId'=>$request->userId
+            ],
+            [
+                'sellerId'=>NULL,
+                'name'=>$request->name,
+                'mobile'=>$request->mobile,
+                'street'=>$request->street,
+                'landmark'=>$request->landmark,
+                'city'=>$request->city,
+                'state'=>$request->state,
+                'country'=>$request->country,
+                'pincode'=>$request->pincode,
+            ]
+        );
+        return redirect()->back()->with('success', 'Address update successfully');
     }
 
     /**

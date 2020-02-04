@@ -97,7 +97,7 @@ class PaymentController extends Controller
                 'userId'=>$item->userId,
                 'sellerId'=>$item->sellerId,
                 'cartId'=>$item->id,
-                'amount'=>$item->payableAmount,
+                'amount'=>$item->payableAmount+59,
                 'paymentMode'=>$mode,
                 'referanceNo'=>$referance
             ]);
@@ -117,7 +117,7 @@ class PaymentController extends Controller
                 'totalAmount'=>$item->totalAmount,
                 'coupenCode'=>$item->coupenCode,
                 'discountAmount'=>$item->discountAmount,
-                'payableAmount'=>$item->payableAmount,
+                'payableAmount'=>$item->payableAmount+59,
                 'status'=>'PENDING'
             ]);
             Cart::where(['userId'=>Auth::user()->id,'status'=>1])->update(['status'=>0]);

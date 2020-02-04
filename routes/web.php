@@ -20,35 +20,39 @@ Auth::routes();
 
 
 
+// this route is use for seller
+
+Route::group(['middleware' => ['auth:seller']], function () {
+    
+            Route::get('/seller','SellerController@index');
+
+            Route::resource('/seller/products','ProductController');
+            Route::get('/seller/product/add', 'ProductController@addNew');
+
+            Route::resource('/seller/product/attribute','AttributeController');
+
+            Route::resource('/seller/product/variations','ProductVariationController');
+            Route::get('/getAttributeForVariations','ProductVariationController@getAttributeForVariations')->name('variations.attribute');
+
+            Route::resource('/seller/order', 'OrderController');
+            Route::get('/seller/orderDetails/{order}', 'OrderController@orderDetails');
+});
+
+// this route is use for seller
+
+
+// this route is use for user
 
 Route::get('/', function () {
     return redirect('/home');
 });
-
-Route::group(['middleware' => ['auth:seller']], function () {
-    
-Route::get('/seller','SellerController@index');
-
-Route::resource('/seller/products','ProductController');
-Route::get('/seller/product/add', 'ProductController@addNew');
-
-Route::resource('/seller/product/attribute','AttributeController');
-
-Route::resource('/seller/product/variations','ProductVariationController');
-Route::get('/getAttributeForVariations','ProductVariationController@getAttributeForVariations')->name('variations.attribute');
-
-Route::resource('/seller/order', 'OrderController');
-Route::get('/seller/orderDetails/{order}', 'OrderController@orderDetails');
-});
-
-
-// this route is use for user
 
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('/product', 'User\ProductController');
 Route::get('/sizeAjax/{id}', 'User\ProductController@getSizeForAjax');
 Route::get('/sizeAjax', 'User\ProductController@updateSizeForAjax');
+Route::get('/search', 'User\ProductController@getSearchData');
 
 Route::resource('/cart', 'CartController');
 Route::get('/cart/removeDiscount/{id}','CartController@removeDiscount');
@@ -57,6 +61,10 @@ Route::post('/cart/coupen','CartController@coupen');
 Route::resource('/payment', 'PaymentController');
 Route::post('/payment/paytmRsponse','PaymentController@paytmResponse');
 
-Route::view('/order', 'user.orderPlaced');
+Route::resource('/orders', 'User\OrderController');
+Route::get('/order', 'User\OrderController@orderPlaced');
 
 Route::resource('/address', 'AddressController');
+
+Route::resource('/profile', 'User\ProfileController');
+Route::post('/profile/address', 'User\ProfileController@address');

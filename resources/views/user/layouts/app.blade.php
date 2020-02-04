@@ -5,7 +5,7 @@
   <!-- Required meta tags -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <link rel="icon" href="{{asset('/user/img/fevicon.png')}}" type="image/png" />
+  {{-- <link rel="icon" href="{{asset('/user/img/fevicon.png')}}" type="image/png" /> --}}
   <title>Patel Sales</title>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="{{ asset('user/css/bootstrap.css') }}" />
@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="{{ asset('user/css/responsive.css') }}" />
    <!-- Toastr -->
    <link rel="stylesheet" href="{{ asset('user/toastr/toastr.min.css') }}">
+   @yield('extra-css')
 </head>
 
 <body>
@@ -33,8 +34,8 @@
         <div class="row">
           <div class="col-lg-7">
             <div class="float-left">
-              <p>Phone: +01 256 25 235</p>
-              <p>email: info@eiser.com</p>
+              <p>Phone: +94 997 967 8595</p>
+              <p>email: patelkrishn00@gmail.com</p>
             </div>
           </div>
           <div class="col-lg-5">
@@ -88,9 +89,12 @@
                   <li class="nav-item">
                         <a class="nav-link" href="/cart">Shopping Cart</a>
                   </li>
-                  <li class="nav-item submenu dropdown">
+                  <li class="nav-item">
+                    <a class="nav-link" href="/orders">My Orders</a>
+                  </li>
+                  {{-- <li class="nav-item submenu dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                      aria-expanded="false">Pages</a>
+                      aria-expanded="false">My Orders</a>
                     <ul class="dropdown-menu">
                       <li class="nav-item">
                         <a class="nav-link" href="tracking.html">Tracking</a>
@@ -99,9 +103,9 @@
                         <a class="nav-link" href="elements.html">Elements</a>
                       </li>
                     </ul>
-                  </li>
+                  </li> --}}
                   <li class="nav-item">
-                    <a class="nav-link" href="contact.html">Contact</a>
+                    <a class="nav-link" href="/profile">My Account</a>
                   </li>
                 </ul>
               </div>
@@ -109,28 +113,48 @@
               <div class="col-lg-5 pr-0">
                 <ul class="nav navbar-nav navbar-right right_nav pull-right">
                   <li class="nav-item">
-                    <a href="#" class="icons">
+                    <a href="/product" class="icons">
                       <i class="ti-search" aria-hidden="true"></i>
                     </a>
                   </li>
 
                   <li class="nav-item">
-                    <a href="#" class="icons">
+                    <a href="/cart" class="icons">
                       <i class="ti-shopping-cart"></i>
                     </a>
                   </li>
 
-                  <li class="nav-item">
+                  {{-- <li class="nav-item">
                     <a href="#" class="icons">
                       <i class="ti-user" aria-hidden="true"></i>
                     </a>
+                  </li> --}}
+
+                  <li class="nav-item submenu dropdown">
+                    <a href="#" class="icons dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                      aria-expanded="false"><i class="ti-user" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu">
+                      @guest
+                        <li class="nav-item">
+                          <a class="nav-link" href="{{asset('/login')}}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="{{asset('/register')}}">Register</a>
+                        </li>
+                      @else
+                        <li class="nav-item">
+                            <a class="nav-link" 
+                            href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                            Logout
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                              @csrf
+                            </form>
+                        </li>
+                      @endguest
+                    </ul>
                   </li>
 
-                  <li class="nav-item">
-                    <a href="#" class="icons">
-                      <i class="ti-heart" aria-hidden="true"></i>
-                    </a>
-                  </li>
                 </ul>
               </div>
             </div>
@@ -140,6 +164,7 @@
     </div>
   </header>
   <!--================Header Menu Area =================-->
+
 @yield('content')
   
   <!--================ start footer Area  =================-->

@@ -2,7 +2,7 @@
 @section('content')
 
     <!--================Home Banner Area =================-->
-    <section class="banner_area">
+    {{-- <section class="banner_area">
 		<div class="banner_inner d-flex align-items-center">
 		  <div class="container">
 			<div
@@ -19,7 +19,7 @@
 			</div>
 		  </div>
 		</div>
-	  </section>
+	  </section> --}}
 	  <!--================End Home Banner Area =================-->
   
 	  <!--================Single Product Area =================-->
@@ -33,36 +33,7 @@
 				  class="carousel slide"
 				  data-ride="carousel"
 				>
-				  {{-- <ol class="carousel-indicators">
-					<li
-					  data-target="#carouselExampleIndicators"
-					  data-slide-to="0"
-					  class="active"
-					>
-					  <img
-						src="/user/img/product/single-product/s-product-s-2.jpg"
-						alt=""
-					  />
-					</li>
-					<li
-					  data-target="#carouselExampleIndicators"
-					  data-slide-to="1"
-					>
-					  <img
-						src="/user/img/product/single-product/s-product-s-3.jpg"
-						alt=""
-					  />
-					</li>
-					<li
-					  data-target="#carouselExampleIndicators"
-					  data-slide-to="2"
-					>
-					  <img
-						src="/user/img/product/single-product/s-product-s-4.jpg"
-						alt=""
-					  />
-					</li>
-				  </ol> --}}
+				  
 				  <div class="carousel-inner">
 					<div class="carousel-item active">
 					  <img
@@ -91,7 +62,15 @@
 			</div>
 			<div class="col-lg-5 offset-lg-1">
 			  <div class="s_product_text">
-				<h3>{{$items['productTitle']}}<br>({{$items['size']}}+{{$items['color']}})</h3>
+				  @if($items['size']!=NULL && $items['color']!=NULL)
+					<h3>{{$items['productTitle']}}<br>({{$items['color']}}+{{$items['size']}})</h3>
+				@elseif($items['size']==NULL && $items['color']!=NULL)
+					<h3>{{$items['productTitle']}}<br>({{$items['color']}})</h3>
+				@elseif($items['size']!=NULL && $items['color']==NULL)
+					<h3>{{$items['productTitle']}}<br>({{$items['size']}})</h3>
+				@else
+					<h3>{{$items['productTitle']}}</h3>
+				@endif
 				<?php if($items['onsale']==1){echo '<del style="font-weight:400">₹'.$items['productPrice'].'</del>';} ?>
 				<div class="row">
 					<div class="col-md-3 mr-2"><h2>₹{{ $items['onsale']==1 ? $items['salePrice'] : $items['productPrice']}}</h2></div>
@@ -110,7 +89,7 @@
 				<p>
 				  {{$items['productShortDescreption']}}
 				</p>
-				@if ($colorAttributes!=NULL)
+				@if ($items['color']!=NULL)
 					<div>
 						<div>Color :</div>
 						@foreach ($colorAttributes as $row)
@@ -119,7 +98,9 @@
 					</div>
 				@endif
 
+				@if ($items['size']!=NULL)
 				<div id="sizeAttribute"></div>
+				@endif
 				
 				<br>
 				<div class="product_count">

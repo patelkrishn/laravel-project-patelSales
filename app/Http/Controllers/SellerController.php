@@ -32,13 +32,14 @@ class SellerController extends Controller
                        ->join('addresses','addresses.userId','=','orders.userId')
                        ->select('orders.*','addresses.name')
                        ->where('payments.sellerId',Auth::user()->id)
+                       ->orderBy('orders.id','desc')
                        ->paginate(6);
         $pendingOrderCount=Order::join('payments','payments.id','=','orders.paymentId')
                             ->where(['payments.sellerId'=>Auth::user()->id,'orders.status'=>'PENDING'])->count();
         $shipedOrderCount=Order::join('payments','payments.id','=','orders.paymentId')
                             ->where(['payments.sellerId'=>Auth::user()->id,'orders.status'=>'SHIPED'])->count();
         $holdOrderCount=Order::join('payments','payments.id','=','orders.paymentId')
-                            ->where(['payments.sellerId'=>Auth::user()->id,'orders.status'=>'SHIPED'])->count();
+                            ->where(['payments.sellerId'=>Auth::user()->id,'orders.status'=>'HOLD'])->count();
         $completedOrderCount=Order::join('payments','payments.id','=','orders.paymentId')
                             ->where(['payments.sellerId'=>Auth::user()->id,'orders.status'=>'COMPLETED'])->count();
         return view('seller.home',['orders'=>$orders,'pendingOrderCount'=>$pendingOrderCount,'shipedOrderCount'=>$shipedOrderCount,'holdOrderCount'=>$holdOrderCount,'completedOrderCount'=>$completedOrderCount,'notifications'=>$this->notifications(),'notificationsCount'=>$this->notificationsCount]);

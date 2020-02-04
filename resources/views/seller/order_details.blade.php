@@ -50,8 +50,11 @@
                           <option value="HOLD" {{$orders->status=="HOLD" ? 'selected' : ''}}>On hold</option>
                           <option value="COMPLETED" {{$orders->status=="COMPLETED" ? 'selected' : ''}}>Completed</option>
                           <option value="FAILED" {{$orders->status=="FAILED" ? 'selected' : ''}}>Failed</option>						
+                          <option value="CANCELLED" {{$orders->status=="CANCELLED" ? 'selected' : ''}}>Cancelled</option>						
                           </select>
                         </div>
+                        {{-- {{$orders->created_at}} --}}
+                        {{-- <input type="hidden" name="notificationTimestamp" va> --}}
                         <button type="submit" class="btn btn-primary">Submit</button>
                       </form>
                   </div>
@@ -95,7 +98,7 @@
               </thead>
               <tbody>
                       <tr>
-                          <td>{{ $orders['productTitle']}}</td>
+                          <td>{{ $orders['productTitle']}} <?php if($orders->color!=NULL && $orders->size!=NULL){echo '('.$orders->color.'+'.$orders->size.')';} elseif($orders->color==NULL && $orders->size!=NULL){echo '('.$orders->size.')';} elseif($orders->color!=NULL && $orders->size==NULL){echo '('.$orders->color.')';} else{echo '';} ?></td>
                           <td>₹ {{$orders['salePrice']!=0 ? $orders['salePrice'] : $orders['productPrice']}}</td>
                           <td>X {{ $orders['quantity']}}</td>
                           <td>₹ {{ $orders['totalAmount']}}</td>
@@ -105,6 +108,11 @@
                         <td></td>
                         <td></td>
                         <td>₹ 59</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td colspan="2">Total :</td>
+                        <td>₹ {{ $orders['payableAmount']}}</td>
                       </tr>
           </tbody>
         </table>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Product;
 use App\Attribute;
 use App\ProductVariation;
+use App\Category;
 use Auth;
 use App\Http\Controllers\Controller;
 
@@ -18,7 +19,14 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('user.shop');
+        $categories=Category::all();
+        $categoryForProduct=Category::first();
+        $categoryForProductId=$categoryForProduct['id'];
+        $products=Product::join('productvariations','productvariations.productId','=','products.id')
+                            ->select('products.*','productvariations.*')
+                            ->where('products.productcategories',$categoryForProductId)
+                            ->get();
+        return view('user.shop')->with(['categories'=>$categories,'searchResult'=>'','products'=>$products,'categoryForProduct'=>$categoryForProductId]);
     }
 
     /**
@@ -39,7 +47,25 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+    }
+
+    public function getSearchData(Request $request)
+    {
+        $query=$request->search_data;
+        $categories=Category::all();
+        $categoryForProduct=Category::first();
+        $categoryForProductId=$categoryForProduct['id'];
+        $products=Product::join('productvariations','productvariations.productId','=','products.id')
+                            ->join('categories','categories.id','=','products.productCategories')
+                            ->select('products.*','productvariations.*')
+                            ->where('products.productTitle','like','%'.$query.'%')
+                            ->orWhere('products.productDescreption','like','%'.$query.'%')
+                            ->orWhere('categories.name','like','%'.$query.'%')
+                            ->orWhere('productvariations.size','like','%'.$query.'%')
+                            ->orWhere('productvariations.color','like','%'.$query.'%')
+                            ->get();
+        return view('user.shop')->with(['categories'=>$categories,'searchResult'=>$query,'products'=>$products,'categoryForProduct'=>$categoryForProductId]);
     }
 
     /**
@@ -128,7 +154,12 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $categories=Category::all();
+        $products=Product::join('productvariations','productvariations.productId','=','products.id')
+                            ->select('products.*','productvariations.*')
+                            ->where('products.productcategories',$id)
+                            ->get();
+        return view('user.shop')->with(['categories'=>$categories,'searchResult'=>'','products'=>$products,'categoryForProduct'=>$id]);
     }
 
     /**

@@ -116,19 +116,20 @@
                         <td><button class="btn btn-default order_details" id="{{ $order->id}}"><i class="fa fa-eye"></i></button></td>
                         <td>{{ $order->created_at}}</td>
                         <td>
-                            @if ($order->status=='COMPLETED')
-                                <span class="badge badge-primary">{{ $order->status}}</span>
-                            @elseif($order->status=='PENDING')
-                                <span class="badge badge-info">{{ $order->status}}</span>  
-                            @elseif($order->status=='HOLD')
-                                <span class="badge badge-warning">{{ $order->status}}</span>  
-                            @elseif($order->status=='SHIPED')
-                                <span class="badge badge-success">{{ $order->status}}</span>
-                            @elseif($order->status=='FAILED')
-                            <span class="badge badge-danger">{{ $order->status}}</span>
-                                {{-- <button type="button" class="btn btn-danger disabled">{{ $order->status}}</button> --}}
-                            @endif
-                        </td>
+                          @if ($order->status=='COMPLETED')
+                              <span class="badge badge-primary">Completed</span>
+                          @elseif($order->status=='PENDING')
+                              <span class="badge badge-info">Processing</span>  
+                          @elseif($order->status=='HOLD')
+                              <span class="badge badge-warning">On hold</span>  
+                          @elseif($order->status=='SHIPED')
+                              <span class="badge badge-success">Shiped</span>
+                          @elseif($order->status=='FAILED')
+                              <span class="badge badge-danger">Failed</span>
+                              @elseif($order->status=='CANCELLED')
+                              <span class="badge badge-danger">Cancelled</span>
+                          @endif
+                      </td>
                         <td>₹{{ $order->totalAmount}}</td>
                     </tr>
                 @endforeach

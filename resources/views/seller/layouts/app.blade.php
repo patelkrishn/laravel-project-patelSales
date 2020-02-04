@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.css') }}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <!-- Toastr -->
+  <link rel="stylesheet" href="{{ asset('user/toastr/toastr.min.css') }}">
 </head>
 <!--
 BODY TAG OPTIONS:
@@ -267,6 +269,8 @@ to get the desired effect
 <!-- DataTables -->
 <script src="{{ asset('plugins/datatables/jquery.dataTables.js') }}"></script>
 <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js') }}"></script>
+<!-- Toastr -->
+<script src="{{ asset('user/toastr/toastr.min.js') }}"></script>
 @yield('extra-js')
 </body>
 </html>

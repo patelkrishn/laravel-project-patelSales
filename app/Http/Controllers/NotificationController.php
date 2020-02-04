@@ -45,6 +45,14 @@ class NotificationController extends Controller
         return $notifications;
     }
 
+    public function setSellerNotificationDown($id)
+    {
+        $notifications = Notification::where('id',$id)->update([
+            'status'=>0
+        ]);
+        
+    }
+
     /**
      * Store a newly created resource in storage.
      *

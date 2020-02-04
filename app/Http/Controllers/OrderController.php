@@ -35,6 +35,7 @@ class OrderController extends Controller
                        ->join('addresses','addresses.userId','=','orders.userId')
                        ->select('orders.*','addresses.name')
                        ->where('payments.sellerId',Auth::user()->id)
+                       ->orderBy('orders.id','desc')
                        ->get();
         // dd($orders);
         return view('seller.order',['orders'=>$orders,'notifications'=>$this->notifications(),'notificationsCount'=>$this->notificationsCount]);
@@ -145,7 +146,14 @@ class OrderController extends Controller
     }
     public function orderDetails($order)
     {
-        $orders=Order::join('addresses','addresses.userId','=','orders.userId')
+        $orderCount=Order::join('payments','payments.id','=','orders.paymentId')
+                            ->where(['payments.sellerId'=>Auth::user()->id,'orders.id'=>$order])
+                            ->count();
+                            // dd($orderCount);
+        if ($orderCount==0) {
+            return redirect()->back()->with('error', 'This order is not your. choose other and try again');
+        }else{
+            $orders=Order::join('addresses','addresses.userId','=','orders.userId')
                        ->join('productvariations','productvariations.id','=','orders.productVariationsId')
                        ->join('products','products.id','=','productvariations.productId')
                        ->join('payments','payments.id','=','orders.paymentId')
@@ -154,6 +162,7 @@ class OrderController extends Controller
                        ->first();
                     //    dd($orders);
         return view('seller.order_details',['orders'=>$orders,'orderId'=>$order,'notifications'=>$this->notifications(),'notificationsCount'=>$this->notificationsCount]);
+        }
     }
     /**
      * Show the form for editing the specified resource.
@@ -165,6 +174,7 @@ class OrderController extends Controller
     {
         $order->status=$request->orderStatus;
         $order->save();
+        // app('App\Http\Controllers\NotificationController')->setSellerNotificationDown($request->notificationTimestamp);
         return redirect()->back()->with('success', 'Order status changed successfully !!');
     }
 

@@ -47,7 +47,7 @@
                     @foreach ($products as $product)
                         <tr>
                             <td width="9%"><img src="{{asset($product->productImage) }}" alt="..." class="img-thumbnail" width="100%"></td>
-                            <td><a href="#" class="nav nav-link variation_details" id="{{ $product->id}}">{{ $product->productTitle}}</a></td>
+                            <td><a href="#" class="nav nav-link variation_details" id="{{ $product->id}}">{{ $product->productTitle}} <?php if($product->color!=NULL && $product->size!=NULL){echo '('.$product->color.'+'.$product->size.')';} elseif($product->color==NULL && $product->size!=NULL){echo '('.$product->size.')';} elseif($product->color!=NULL && $product->size==NULL){echo '('.$product->color.')';} else{echo '';} ?></a></td>
                             <td>{{ $product->sku}}</td>
                             <td style="{{ $product->stockQuantity==0 ? 'color:red' : 'color:green' }}">{{ $product->stockQuantity}}&nbsp;({{ $product->stockQuantity==0 ? 'out of stock' : 'in stock' }})</td>
                             <td>{{ $product->productPrice}}</td>

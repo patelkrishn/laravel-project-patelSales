@@ -27,6 +27,8 @@ Route::group(['middleware' => ['auth:seller']], function () {
             Route::get('/seller','SellerController@index');
 
             Route::resource('/seller/products','ProductController');
+            Route::get('/seller/products/edit/{id}','ProductController@editProduct');
+            Route::put('/seller/products/{id}/update','ProductController@updateProduct');
             Route::get('/seller/product/add', 'ProductController@addNew');
 
             Route::resource('/seller/product/attribute','AttributeController');

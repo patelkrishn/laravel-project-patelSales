@@ -37,6 +37,7 @@
                 <tr>
                   <th><i class="far fa-image"></i></th>
                   <th>Name</th>
+                  <th>VIEW</th>
                   <th>SKU</th>
                   <th>Stock</th>
                   <th>Price</th>
@@ -47,7 +48,8 @@
                     @foreach ($products as $product)
                         <tr>
                             <td width="9%"><img src="{{asset($product->productImage) }}" alt="..." class="img-thumbnail" width="100%"></td>
-                            <td><a href="#" class="nav nav-link variation_details" id="{{ $product->id}}">{{ $product->productTitle}} <?php if($product->color!=NULL && $product->size!=NULL){echo '('.$product->color.'+'.$product->size.')';} elseif($product->color==NULL && $product->size!=NULL){echo '('.$product->size.')';} elseif($product->color!=NULL && $product->size==NULL){echo '('.$product->color.')';} else{echo '';} ?></a></td>
+                            <td><a href="/seller/products/edit/{{ $product->id}}" class="nav nav-link">{{ $product->productTitle}} <?php if($product->color!=NULL && $product->size!=NULL){echo '('.$product->color.'+'.$product->size.')';} elseif($product->color==NULL && $product->size!=NULL){echo '('.$product->size.')';} elseif($product->color!=NULL && $product->size==NULL){echo '('.$product->color.')';} else{echo '';} ?></a></td>
+                            <td width="1%"><button class="btn btn-default variation_details" id="{{ $product->id}}"><i class="fa fa-eye"></i></button></td>
                             <td>{{ $product->sku}}</td>
                             <td style="{{ $product->stockQuantity==0 ? 'color:red' : 'color:green' }}">{{ $product->stockQuantity}}&nbsp;({{ $product->stockQuantity==0 ? 'out of stock' : 'in stock' }})</td>
                             <td>{{ $product->productPrice}}</td>
@@ -59,6 +61,7 @@
             <tr>
                 <th><i class="far fa-image"></i></th>
                 <th>Name</th>
+                <th>VIEW</th>
                 <th>SKU</th>
                 <th>Stock</th>
                 <th>Price</th>

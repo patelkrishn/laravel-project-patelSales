@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Product;
 use App\Attribute;
 use App\Category;
+use App\ProductVariation;
 use Illuminate\Http\Request;
 use DB;
 use Auth;
@@ -89,9 +90,76 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product)
+    public function edit(Request $request)
     {
-        //
+        $products=ProductVariation::join('products','productvariations.productId','=','products.id')
+                                    ->join('categories','categories.id','=','products.productCategories')
+                                    ->where('productvariations.id',$request->id)
+                                    ->first();
+        $categories=Category::get();
+        // dd($products);
+        return view('seller.productsDetails',['id'=>$request->id,'categories'=>$categories,'products'=>$products,'notifications'=>$this->notifications(),'notificationsCount'=>$this->notificationsCount]);
+    }
+
+    public function editProduct(Request $request,$id)
+    {
+        $products=ProductVariation::join('products','productvariations.productId','=','products.id')
+                                    ->join('categories','categories.id','=','products.productCategories')
+                                    ->where('productvariations.id',$id)
+                                    ->first();
+        $proId=ProductVariation::join('products','productvariations.productId','=','products.id')
+                                    ->join('categories','categories.id','=','products.productCategories')
+                                    ->select('products.id')
+                                    ->where('productvariations.id',$id)
+                                    ->first();
+        $categories=Category::get();
+        $productId=$proId->id;
+        $colorAttributes=Attribute::join('products','attributes.productId','=','products.id')
+                                        ->select('attributes.*')
+                                        ->where(['products.id'=>$productId,'attributes.type'=>'color'])
+                                        ->get();
+        $sizeAttributes=Attribute::join('products','attributes.productId','=','products.id')
+                                        ->select('attributes.*')
+                                        ->where(['products.id'=>$productId,'attributes.type'=>'size'])
+                                        ->get();
+        // dd($products);
+        return view('seller.productsDetails',['id'=>$id,'productId'=>$productId,'sizeAttributes'=>$sizeAttributes,'colorAttributes'=>$colorAttributes,'categories'=>$categories,'products'=>$products,'notifications'=>$this->notifications(),'notificationsCount'=>$this->notificationsCount]);
+    }
+    public function updateProduct(Request $request,$id)
+    {
+        // dd($id);
+        Product::where('id',$request->productId)->update([
+            'productTitle'=>$request->productTitle,
+            'productShortDescreption'=>$request->productShortDescreption,
+            'productDescreption'=>$request->productDescreption,
+            'productCategories'=>$request->productCategories,
+        ]);
+        if ($request->sale_price == 0 || $request->sale_price == NULL ) {
+            $onsale=0;
+        }else {
+            $onsale=1;
+        }
+        if ($request->quantity == 0) {
+            $stockStatus=0;
+        }else{
+            $stockStatus=1;
+        }
+        ProductVariation::where('id',$id)->update([
+                        'productId'=>$request->productId,
+                        // 'productImage'=>$path,
+                        'size'=>$request->size,
+                        'color'=>$request->color,
+                        'productPrice'=>$request->price,
+                        'salePrice'=>$request->sale_price,
+                        'productCoupenCode'=>$request->coupen_code,
+                        'discountAmount'=>$request->discount_amount,
+                        'onsale'=>$onsale,
+                        'sku'=>$request->sku,
+                        'stockQuantity'=>$request->quantity,
+                        'stockStatus'=>$stockStatus,
+                        'totalSales'=>0
+        ]);
+        return redirect()->back()->with('success', 'Product update successfully');
     }
 
     /**

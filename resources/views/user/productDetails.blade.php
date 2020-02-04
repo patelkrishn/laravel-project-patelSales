@@ -87,7 +87,8 @@
 				  </li>
 				</ul>
 				<p>
-				  {{$items['productShortDescreption']}}
+					<?php echo $items['productShortDescreption']; ?>
+				  {{-- {{$items['productShortDescreption']}} --}}
 				</p>
 				@if ($items['color']!=NULL)
 					<div>

@@ -171,7 +171,7 @@ to get the desired effect
                 <a href="#" class="nav-link">
                   <i class="nav-icon fas fa-copy"></i>
                   <p>
-                    Products
+                    My Products
                     <i class="fas fa-angle-left right"></i>
                   </p>
                 </a>
@@ -202,32 +202,11 @@ to get the desired effect
                   </li>
                 </ul>
               </li>
-              @if (Request::path()=='seller/order')
-                  <li class="nav-item has-treeview  menu-open">
-              @else
-                  <li class="nav-item has-treeview">
-              @endif
-                <a href="#" class="nav-link">
+              <li class="nav-item">
+                <a href="/seller/order" class="nav-link {{ Request::path()=='seller/order' ? 'active' : '' }}">
                   <i class="nav-icon fas fa-copy"></i>
-                  <p>
-                    Orders
-                    <i class="fas fa-angle-left right"></i>
-                  </p>
+                  <p>My Orders</p>
                 </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="/seller/order" class="nav-link {{ Request::path()=='seller/order' ? 'active' : '' }}">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>All Orders</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="/seller/product/add" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Pending Orders</p>
-                    </a>
-                  </li>
-                </ul>
               </li>
         </ul>
       </nav>

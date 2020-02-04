@@ -84,17 +84,6 @@
 			<div class="single-product">
 			  <div class="product-img">
 				<img class="img-fluid w-100" src="{{asset($item->productImage)}}" alt="" />
-				<div class="p_icon">
-				  <a href="#">
-					<i class="ti-eye"></i>
-				  </a>
-				  <a href="#">
-					<i class="ti-heart"></i>
-				  </a>
-				  <a href="#">
-					<i class="ti-shopping-cart"></i>
-				  </a>
-				</div>
 			  </div>
 			  <div class="product-btm">
 				<a href="/product/{{$item->id}}" class="d-block">

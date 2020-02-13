@@ -52,7 +52,7 @@
                           @endif
                         </a>
                       </h4>
-                      {{$item->productShortDescreption}}
+                      <?php echo $item->productShortDescreption; ?>
                     </div>
                     <div class="col-md-3 mt-sm-20 left-align-p">
                       @if ($item->onsale==1)
